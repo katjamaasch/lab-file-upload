@@ -9,7 +9,17 @@ const { Router } = require('express');
 const router = new Router();
 const Post = require('../models/Post.model');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads' });
+const upload = multer({ dest: 'public/uploads' });
+
+/*
+const routeGuard = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    next(new Error('You need to log in first.'));
+  }
+};
+*/
 
 router.get('/', (req, res) => res.render('posts/create-post'));
 
@@ -21,10 +31,11 @@ router.post('/', upload.single('image'), (req, res) => {
   Post.create({
     content: data.content,
     /// creatorId: ,
-    picPath: image.path,
+    //picPath: image.path,
+    picPath: '/uploads/' + image.filename,
     picName: image.originalname
   }).then(result => {
-    res.redirect(`${result._id}`);
+    res.redirect(`/post/${result._id}`);
   });
 });
 
