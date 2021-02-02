@@ -8,6 +8,8 @@ const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const hbs = require('hbs');
 const mongoose = require('mongoose');
+const multer = require('multer');
+const User = require('./models/User.model');
 
 // Set up the database
 require('./configs/db.config');
@@ -16,6 +18,7 @@ require('./configs/db.config');
 const bindUserToViewLocals = require('./configs/user-locals.config');
 
 // Routers
+const postRouter = require('./routes/post.routes');
 const indexRouter = require('./routes/index.routes');
 const authRouter = require('./routes/auth.routes');
 
@@ -41,6 +44,7 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 // Routes middleware
 app.use('/', indexRouter);
 app.use('/', authRouter);
+app.use('/post', postRouter);
 
 // Catch missing routes and forward to error handler
 app.use((req, res, next) => next(createError(404)));
